@@ -3,7 +3,21 @@ $(document).ready(function() {
 
 
 var firebase = function(){
-
+// NU FIREBASE START
+var listRef = new Firebase("https://backseatdj.firebaseio.com/presence/");
+var userRef = listRef.push();
+var presenceRef = new Firebase("https://backseatdj.firebaseio.com/.info/connected");
+presenceRef.on("value", function(snap) {
+  if (snap.val()) {
+    userRef.set(true);
+    // Remove ourselves when we disconnect.
+    userRef.onDisconnect().remove();
+  }
+});
+listRef.on("value", function(snap) {
+  console.log("# of online users = " + snap.numChildren());
+});
+// NU FIREBASE END
   var numOfPlayers = 5;
 
   var upSkipVotes1 = new Firebase("https://backseatdj.firebaseIO.com/votes/upSkipVotes");
